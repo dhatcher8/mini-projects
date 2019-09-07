@@ -5,6 +5,8 @@ import sys
 import cv2
 import numpy as np
 
+filters = ["blur", "sharpen", "desharpen", "outline", "emboss"]
+
 def main():
     print("\nWelcome to our image editor!\n")
     image_file = ask_for_image_file()
@@ -26,6 +28,12 @@ def main():
         matrix = get_blur_matrix()
     elif filter_type == "sharpen":
         matrix = get_sharpen_matrix()
+    elif filter_type == "desharpen":
+        matrix = get_desharpen_matrix()
+    elif filter_type == "outline":
+        matrix = get_outline_matrix()
+    elif filter_type == "emboss":
+        matrix = get_emboss_matrix()
     else:
         print("Error: Filter Type returned no matrix.")
         sys.exit()
@@ -47,11 +55,11 @@ def main():
 
 def ask_for_filter_type():
     filter_type = ""
-    while filter_type != "blur" and filter_type != "sharpen":
+    while filter_type not in filters:
         filter_type = input('How would you like to edit your image? Enter "o" for options: ')
         if filter_type == "o":
-            print('\nEnter:\n    - "blur" to blur your image\n    - "sharpen" to sharpen your image\n')
-        elif filter_type != "blur" and filter_type != "sharpen":
+            print('\nEnter:\n    - "blur" to blur your image\n    - "sharpen" to sharpen your image\n    - "desharpen" to desharpen your image\n    - "outline" to get image outlines\n    - "emboss" to emboss your image\n')
+        elif filter_type not in filters:
             print("Please retry.")
     print("Processing... this may take a second.")
     return filter_type
@@ -73,6 +81,24 @@ def get_sharpen_matrix():
     matrix = [[0, -1, 0],
               [-1, 5, -1],
               [0, -1, 0]]
+    return matrix
+
+def get_desharpen_matrix():
+    matrix = [[0, 3/2, 0],
+              [3/2, -5, 3/2],
+              [0, 3/2, 0]]
+    return matrix
+
+def get_outline_matrix():
+    matrix = [[-1, -1, -1],
+              [-1, 8, -1],
+              [-1, -1, -1]]
+    return matrix
+
+def get_emboss_matrix():
+    matrix = [[-2, -1, 0],
+              [-1, 1, 1],
+              [0, 1, 2]]
     return matrix
 
 if __name__== "__main__":
